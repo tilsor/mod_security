@@ -5,6 +5,9 @@
 %{!?_httpd_confdir:    %{expand: %%global _httpd_confdir    %%{_sysconfdir}/httpd/conf.d}}
 %{!?_httpd_moddir:    %{expand: %%global _httpd_moddir    %%{_libdir}/httpd/modules}}
 
+# https://docs.fedoraproject.org/en-US/modularity/building-modules/local/building-modules-locally/#_spec_file_configuration_optional
+%define _disable_source_fetch 0
+
 # enable PIE
 %global _hardened_build 1
 
@@ -20,7 +23,7 @@ Release: 1%{?dist}
 License: ASL 2.0
 URL: http://www.modsecurity.org/
 Group: System Environment/Daemons
-Source: https://github.com/SpiderLabs/ModSecurity/releases/download/v%{version}/modsecurity-%{version}.tar.gz
+Source0: https://github.com/SpiderLabs/ModSecurity/releases/download/v%{version}/modsecurity-%{version}.tar.gz
 Source1: https://raw.githubusercontent.com/tilsor/mod_security/main/config/mod_security.conf
 Source2: https://raw.githubusercontent.com/tilsor/mod_security/main/config/10-mod_security.conf
 Source3: https://raw.githubusercontent.com/tilsor/mod_security/main/config/modsecurity_localrules.conf
