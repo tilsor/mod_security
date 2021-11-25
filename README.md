@@ -14,3 +14,14 @@ yum-config-manager --add-repo https://copr.fedorainfracloud.org/coprs/tilsor/mod
 yum-config-manager --enable tilsor-mod_security-epel-7
 yum install mod_security -y
 ```
+
+## Building locally
+
+If you want to build locally the packages, you can do these steps:
+```
+yum install rpmdevtools rpm-build -y
+spectool -g -R spec/mod_security.spec
+rpmbuild -ba spec/mod_security.spec
+```
+
+Or you can do it in your local copr.
