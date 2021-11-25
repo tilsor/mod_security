@@ -26,4 +26,10 @@ spectool -g -R spec/mod_security.spec
 rpmbuild -ba spec/mod_security.spec
 ```
 
-Or you can do it in your local copr.
+Or you can do it in your local mock:
+
+```
+mock --buildsrpm -r epel-8-x86_64 --spec ~/rpmbuild/SPECS/mod_security.spec --sources ~/rpmbuild/SOURCES
+cp /var/lib/mock/epel-8-x86_64/result/mod_security-2.9.5-1.el8.src.rpm ~/rpmbuild/SRPMS/
+mock --rebuild -r epel-8-x86_64 mod_security-2.9.5-1.el8.src.rpm
+```
