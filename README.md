@@ -1,5 +1,7 @@
 # mod_security RPM
 
+[![Copr build status](https://copr.fedorainfracloud.org/coprs/tilsor/mod_security/package/mod_security/status_image/last_build.png)](https://copr.fedorainfracloud.org/coprs/tilsor/mod_security/package/mod_security/)
+
 This repository has the config and spec files for building mod_security RPM for EL.
 
 Build has `yajl` and `ssdeep` support, and the relevant config.  Packages are build using the excellent Fedora COPR system.
