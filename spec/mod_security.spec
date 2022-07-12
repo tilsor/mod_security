@@ -95,7 +95,7 @@ install -m0755 apache2/.libs/mod_security2.so %{buildroot}%{_httpd_moddir}/mod_s
 # 2.4-style
 install -Dp -m0644 %{SOURCE2} %{buildroot}%{_httpd_modconfdir}/10-mod_security.conf
 install -Dp -m0644 %{SOURCE1} %{buildroot}%{_httpd_confdir}/mod_security.conf
-sed  -i 's/Include/IncludeOptional/'  %{buildroot}%{_httpd_confdir}/mod_security.conf
+sed  -i 's/Include /IncludeOptional /'  %{buildroot}%{_httpd_confdir}/mod_security.conf
 %else
 # 2.2-style
 install -d -m0755 %{buildroot}%{_httpd_confdir}
