@@ -1,7 +1,9 @@
 %{!?_httpd_apxs: %{expand: %%global _httpd_apxs %%{_sbindir}/apxs}}
 %{!?_httpd_mmn: %{expand: %%global _httpd_mmn %%(cat %{_includedir}/httpd/.mmn || echo 0-0)}}
 # /etc/httpd/conf.d with httpd < 2.4 and defined as /etc/httpd/conf.modules.d with httpd >= 2.4
-%{!?_httpd_modconfdir: %{expand: %%global _httpd_modconfdir %%{_sysconfdir}/httpd/conf.d}}
+#%{!?_httpd_modconfdir: %{expand: %%global _httpd_modconfdir %%{_sysconfdir}/httpd/conf.d}}
+%{!?_httpd_modulesconfdir: %{expand: %%global _httpd_modulesconfdir %%{_sysconfdir}/httpd/conf.modules.d}}
+%{!?_httpd_modconfdir: %{expand: %%global _httpd_modconfdir %%{_sysconfdir}/httpd/modsecurity.d}}
 %{!?_httpd_confdir:    %{expand: %%global _httpd_confdir    %%{_sysconfdir}/httpd/conf.d}}
 %{!?_httpd_moddir:    %{expand: %%global _httpd_moddir    %%{_libdir}/httpd/modules}}
 
@@ -19,7 +21,7 @@
 Summary: Security module for the Apache HTTP Server
 Name: mod_security 
 Version: 2.9.7
-Release: 0%{?dist}
+Release: 1%{?dist}
 License: ASL 2.0
 URL: http://www.modsecurity.org/
 Group: System Environment/Daemons
@@ -27,6 +29,7 @@ Source0: https://github.com/SpiderLabs/ModSecurity/releases/download/v%{version}
 Source1: https://raw.githubusercontent.com/tilsor/mod_security/main/config/mod_security.conf
 Source2: https://raw.githubusercontent.com/tilsor/mod_security/main/config/10-mod_security.conf
 Source3: https://raw.githubusercontent.com/tilsor/mod_security/main/config/modsecurity_localrules.conf
+Source4: https://raw.githubusercontent.com/tilsor/mod_security/main/config/00-modsecurity.base.conf
 Requires: httpd httpd-mmn = %{_httpd_mmn}
 # Required for force recent TLS  version
 #BuildRequires: curl-devel yajl-devel
@@ -93,9 +96,9 @@ install -m0755 apache2/.libs/mod_security2.so %{buildroot}%{_httpd_moddir}/mod_s
 
 %if "%{_httpd_modconfdir}" != "%{_httpd_confdir}"
 # 2.4-style
-install -Dp -m0644 %{SOURCE2} %{buildroot}%{_httpd_modconfdir}/10-mod_security.conf
+install -Dp -m0644 %{SOURCE2} %{buildroot}%{_httpd_modulesconfdir}/10-mod_security.conf
 install -Dp -m0644 %{SOURCE1} %{buildroot}%{_httpd_confdir}/mod_security.conf
-sed  -i 's/Include /IncludeOptional /'  %{buildroot}%{_httpd_confdir}/mod_security.conf
+install -Dp -m0644 %{SOURCE4} %{buildroot}%{_httpd_modconfdir}/00-modsecurity.base.conf
 %else
 # 2.2-style
 install -d -m0755 %{buildroot}%{_httpd_confdir}
@@ -141,6 +144,9 @@ install -m0644 mlogc/mlogc-default.conf %{buildroot}%{_sysconfdir}/mlogc.conf
 %endif
 
 %changelog
+* Fri Dec 08 2023 Germán González <ggonzalez@tilsor.com.uy> - 2.9.7-1
+- Changes on mod_security configuration files. Separate includes from base config. - 2.9.7-1
+
 * Mon Jan 09 2023 Germán González <ggonzalez@tilsor.com.uy> - 2.9.7-0
 - Update to the last version - 2.9.7
 
