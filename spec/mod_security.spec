@@ -98,7 +98,7 @@ install -m0755 apache2/.libs/mod_security2.so %{buildroot}%{_httpd_moddir}/mod_s
 # 2.4-style
 install -Dp -m0644 %{SOURCE2} %{buildroot}%{_httpd_modulesconfdir}/10-mod_security.conf
 install -Dp -m0644 %{SOURCE1} %{buildroot}%{_httpd_confdir}/mod_security.conf
-install -Dp -m0644 %{SOURCE4} %{buildroot}%{_httpd_modconfdir}/00-modsecurity.base.conf
+install -Dp -m0644 %{SOURCE4} %{buildroot}%{_sysconfdir}/httpd/modsecurity.d/00-modsecurity.base.conf
 %else
 # 2.2-style
 install -d -m0755 %{buildroot}%{_httpd_confdir}
@@ -131,6 +131,7 @@ install -m0644 mlogc/mlogc-default.conf %{buildroot}%{_sysconfdir}/mlogc.conf
 %dir %{_sysconfdir}/httpd/modsecurity.d/activated_rules
 %dir %{_sysconfdir}/httpd/modsecurity.d/local_rules
 %config(noreplace) %{_sysconfdir}/httpd/modsecurity.d/local_rules/*.conf
+%config(noreplace) %{_sysconfdir}/httpd/modsecurity.d/*.conf
 %attr(770,apache,root) %dir %{_localstatedir}/lib/%{name}
 
 %if %with_mlogc
@@ -144,6 +145,9 @@ install -m0644 mlogc/mlogc-default.conf %{buildroot}%{_sysconfdir}/mlogc.conf
 %endif
 
 %changelog
+* Mon Dec 11 2023 Germán González <ggonzalez@tilsor.com.uy> - 2.9.7-2
+- Fix path to ModSeurity base config. - 2.9.7-2
+
 * Fri Dec 08 2023 Germán González <ggonzalez@tilsor.com.uy> - 2.9.7-1
 - Changes on mod_security configuration files. Separate includes from base config. - 2.9.7-1
 
