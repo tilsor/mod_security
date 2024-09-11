@@ -18,14 +18,17 @@
 # Conditionals
 %bcond_with ssdeep
 
+# Parameterization of the release number
+%global custom_release 1
+
 Summary: Security module for the Apache HTTP Server
 Name: mod_security 
-Version: 2.9.7
-Release: 2%{?dist}
+Version: 2.9.8
+Release: %{custom_release}%{?dist}
 License: ASL 2.0
 URL: http://www.modsecurity.org/
 Group: System Environment/Daemons
-Source0: https://github.com/SpiderLabs/ModSecurity/releases/download/v%{version}/modsecurity-%{version}.tar.gz
+Source0: https://github.com/tilsor/ModSecurity/releases/download/v%{version}-%{custom_release}/modsecurity-v%{version}-%{custom_release}.tar.gz
 Source1: https://raw.githubusercontent.com/tilsor/mod_security/main/config/mod_security.conf
 Source2: https://raw.githubusercontent.com/tilsor/mod_security/main/config/10-mod_security.conf
 Source3: https://raw.githubusercontent.com/tilsor/mod_security/main/config/modsecurity_localrules.conf
@@ -64,7 +67,7 @@ This package contains the ModSecurity Audit Log Collector.
 %endif
 
 %prep
-%setup -q -n modsecurity-%{version}
+%setup -q -n modsecurity-v%{version}-%{custom_release}
 
 %build
 %configure --enable-pcre-match-limit=1000000 \
@@ -145,6 +148,10 @@ install -m0644 mlogc/mlogc-default.conf %{buildroot}%{_sysconfdir}/mlogc.conf
 %endif
 
 %changelog
+* Wed Sep 11 2024 Germán González <ggonzalez@tilsor.com.uy> - 2.9.8-1
+- Fix compilation error. - 2.9.8-1
+- Update ModSecurity to last version. - 2.9.8
+
 * Mon Dec 11 2023 Germán González <ggonzalez@tilsor.com.uy> - 2.9.7-2
 - Fix path to ModSeurity base config. - 2.9.7-2
 
@@ -453,3 +460,4 @@ install -m0644 mlogc/mlogc-default.conf %{buildroot}%{_sysconfdir}/mlogc.conf
 
 * Thu May 19 2005 Michael Fleming <mfleming+rpm@enlartenment.com> 1.8.7-1
 - Initial spin for Extras
+
