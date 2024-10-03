@@ -1,9 +1,8 @@
 %{!?_httpd_apxs: %{expand: %%global _httpd_apxs %%{_sbindir}/apxs}}
 %{!?_httpd_mmn: %{expand: %%global _httpd_mmn %%(cat %{_includedir}/httpd/.mmn || echo 0-0)}}
 # /etc/httpd/conf.d with httpd < 2.4 and defined as /etc/httpd/conf.modules.d with httpd >= 2.4
-#%{!?_httpd_modconfdir: %{expand: %%global _httpd_modconfdir %%{_sysconfdir}/httpd/conf.d}}
-%{!?_httpd_modulesconfdir: %{expand: %%global _httpd_modulesconfdir %%{_sysconfdir}/httpd/conf.modules.d}}
 %{!?_httpd_modconfdir: %{expand: %%global _httpd_modconfdir %%{_sysconfdir}/httpd/modsecurity.d}}
+%{!?_httpd_modulesconfdir: %{expand: %%global _httpd_modulesconfdir %%{_sysconfdir}/httpd/conf.modules.d}}
 %{!?_httpd_confdir:    %{expand: %%global _httpd_confdir    %%{_sysconfdir}/httpd/conf.d}}
 %{!?_httpd_moddir:    %{expand: %%global _httpd_moddir    %%{_libdir}/httpd/modules}}
 
@@ -22,7 +21,7 @@
 %global custom_release 1
 
 Summary: Security module for the Apache HTTP Server
-Name: mod_security 
+Name: mod_security
 Version: 2.9.8
 Release: %{custom_release}%{?dist}
 License: ASL 2.0
@@ -33,18 +32,28 @@ Source1: https://raw.githubusercontent.com/tilsor/mod_security/main/config/mod_s
 Source2: https://raw.githubusercontent.com/tilsor/mod_security/main/config/10-mod_security.conf
 Source3: https://raw.githubusercontent.com/tilsor/mod_security/main/config/modsecurity_localrules.conf
 Source4: https://raw.githubusercontent.com/tilsor/mod_security/main/config/00-modsecurity.base.conf
+									   
+													 
+
 Requires: httpd httpd-mmn = %{_httpd_mmn}
-# Required for force recent TLS  version
-#BuildRequires: curl-devel yajl-devel
+%if 0%{?fedora} || 0%{?rhel} > 7
+# Ensure apache user exists for file ownership
+Requires(pre): httpd-filesystem
+%endif
+
+BuildRequires: gcc, make, autoconf, automake, libtool
 BuildRequires: httpd-devel
 BuildRequires: perl-generators
-BuildRequires: pkgconfig(libxml-2.0) pkgconfig(lua) pkgconfig(libpcre) pkgconfig(libcurl)
+BuildRequires: pkgconfig(libcurl)
+BuildRequires: pkgconfig(libpcre)
+BuildRequires: pkgconfig(libxml-2.0)
+BuildRequires: pkgconfig(lua)
 
 # Workarround for EL6
 %if 0%{?el6}
 BuildRequires: yajl-devel
 %else
-BuildRequires: pkgconfig(yajl)  
+BuildRequires: pkgconfig(yajl)
 %endif
 
 %if %{with ssdeep}
@@ -57,12 +66,16 @@ for web applications. It operates embedded into the web server, acting
 as a powerful umbrella - shielding web applications from attacks.
 
 %if %with_mlogc
-%package -n     mlogc
+%package        mlogc
 Summary:        ModSecurity Audit Log Collector
 Group:          System Environment/Daemons
 Requires:       mod_security
+%if 0%{?fedora} || 0%{?rhel} > 7
+# Ensure apache user exists for file ownership
+Requires(pre):  httpd-filesystem
+%endif
 
-%description -n mlogc
+%description mlogc
 This package contains the ModSecurity Audit Log Collector.
 %endif
 
@@ -70,11 +83,13 @@ This package contains the ModSecurity Audit Log Collector.
 %setup -q -n modsecurity-v%{version}-%{custom_release}
 
 %build
+			
 %configure --enable-pcre-match-limit=1000000 \
            --enable-pcre-match-limit-recursion=1000000 \
            --with-apxs=%{_httpd_apxs} \
-	       %{?_with_ssdeep} \
+               %{?_with_ssdeep} \
            --with-yajl
+
 # remove rpath
 sed -i 's|^hardcode_libdir_flag_spec=.*|hardcode_libdir_flag_spec=""|g' libtool
 sed -i 's|^runpath_var=LD_RUN_PATH|runpath_var=DIE_RPATH_DIE|g' libtool
@@ -101,7 +116,7 @@ install -m0755 apache2/.libs/mod_security2.so %{buildroot}%{_httpd_moddir}/mod_s
 # 2.4-style
 install -Dp -m0644 %{SOURCE2} %{buildroot}%{_httpd_modulesconfdir}/10-mod_security.conf
 install -Dp -m0644 %{SOURCE1} %{buildroot}%{_httpd_confdir}/mod_security.conf
-install -Dp -m0644 %{SOURCE4} %{buildroot}%{_sysconfdir}/httpd/modsecurity.d/00-modsecurity.base.conf
+install -Dp -m0644 %{SOURCE4} %{buildroot}%{_httpd_modconfdir}/00-modsecurity.base.conf
 %else
 # 2.2-style
 install -d -m0755 %{buildroot}%{_httpd_confdir}
