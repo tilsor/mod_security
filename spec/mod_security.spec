@@ -1,7 +1,6 @@
 %{!?_httpd_apxs: %{expand: %%global _httpd_apxs %%{_sbindir}/apxs}}
 %{!?_httpd_mmn: %{expand: %%global _httpd_mmn %%(cat %{_includedir}/httpd/.mmn || echo 0-0)}}
 # /etc/httpd/conf.d with httpd < 2.4 and defined as /etc/httpd/conf.modules.d with httpd >= 2.4
-#%{!?_httpd_modconfdir: %{expand: %%global _httpd_modconfdir %%{_sysconfdir}/httpd/conf.d}}
 %{!?_httpd_modulesconfdir: %{expand: %%global _httpd_modulesconfdir %%{_sysconfdir}/httpd/conf.modules.d}}
 %{!?_httpd_modconfdir: %{expand: %%global _httpd_modconfdir %%{_sysconfdir}/httpd/modsecurity.d}}
 %{!?_httpd_confdir:    %{expand: %%global _httpd_confdir    %%{_sysconfdir}/httpd/conf.d}}
@@ -19,7 +18,7 @@
 %bcond_with ssdeep
 
 # Parameterization of the release number
-%global custom_release 1
+#%global custom_release 1
 
 Summary: Security module for the Apache HTTP Server
 Name: mod_security 
@@ -28,7 +27,6 @@ Release: %{custom_release}%{?dist}
 License: ASL 2.0
 URL: http://www.modsecurity.org/
 Group: System Environment/Daemons
-#Source0: https://github.com/tilsor/ModSecurity/releases/download/v%{version}-%{custom_release}/modsecurity-v%{version}-%{custom_release}.tar.gz
 Source0: https://github.com/owasp-modsecurity/ModSecurity/releases/download/v%{version}/modsecurity-v%{version}.tar.gz
 Source1: https://raw.githubusercontent.com/tilsor/mod_security/main/config/mod_security.conf
 Source2: https://raw.githubusercontent.com/tilsor/mod_security/main/config/10-mod_security.conf
@@ -68,7 +66,6 @@ This package contains the ModSecurity Audit Log Collector.
 %endif
 
 %prep
-#%setup -q -n modsecurity-v%{version}-%{custom_release}
 %setup -q -n modsecurity-v%{version}
 
 %build
