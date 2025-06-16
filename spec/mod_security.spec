@@ -23,7 +23,7 @@
 
 Summary: Security module for the Apache HTTP Server
 Name: mod_security 
-Version: 2.9.8
+Version: 2.9.10
 Release: %{custom_release}%{?dist}
 License: ASL 2.0
 URL: http://www.modsecurity.org/
@@ -148,6 +148,9 @@ install -m0644 mlogc/mlogc-default.conf %{buildroot}%{_sysconfdir}/mlogc.conf
 %endif
 
 %changelog
+* Mon Jun 16 2025 Germán González <ggonzalez@tilsor.com.uy> - 2.9.10
+- Update ModSecurity to last version. - 2.9.10
+
 * Wed Sep 11 2024 Germán González <ggonzalez@tilsor.com.uy> - 2.9.8-1
 - Fix compilation error. - 2.9.8-1
 - Update ModSecurity to last version. - 2.9.8
