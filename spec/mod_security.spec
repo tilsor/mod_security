@@ -38,7 +38,7 @@ Requires: httpd httpd-mmn = %{_httpd_mmn}
 BuildRequires: httpd-devel
 BuildRequires: perl-generators pcre2
 #BuildRequires: pkgconfig(libxml-2.0) pkgconfig(lua) pkgconfig(libpcre) pkgconfig(libcurl) pcre2  
-BuildRequires: pkgconfig(libxml-2.0) pkgconfig(lua) pkgconfig(libpcre2-devel) pkgconfig(libcurl) 
+BuildRequires: pkgconfig(libxml-2.0) pkgconfig(lua) pkgconfig(pcre2-devel) pkgconfig(libcurl) 
 
 # Workarround for EL6
 %if 0%{?el6}
