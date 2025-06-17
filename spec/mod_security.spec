@@ -33,7 +33,7 @@ Requires: httpd httpd-mmn = %{_httpd_mmn}
 # Required for force recent TLS  version
 #BuildRequires: curl-devel yajl-devel
 BuildRequires: httpd-devel
-BuildRequires: perl-generators pcre2
+BuildRequires: perl-generators pcre2 pcre2-devel
 #BuildRequires: pkgconfig(libxml-2.0) pkgconfig(lua) pkgconfig(libpcre) pkgconfig(libcurl) pcre2  
 #BuildRequires: pkgconfig(libxml-2.0) pkgconfig(lua) pkgconfig(pcre2-devel) pkgconfig(libcurl) 
 BuildRequires: pkgconfig(libxml-2.0) pkgconfig(lua) pkgconfig(libcurl) 
