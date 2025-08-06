@@ -45,6 +45,11 @@ BuildRequires: yajl-devel
 BuildRequires: pkgconfig(yajl)  
 %endif
 
+# Workarround for EL9
+%if 0%{?el9}
+BuildRequires: make
+%endif
+
 %if %{with ssdeep}
 BuildRequires: ssdeep-devel
 %endif
