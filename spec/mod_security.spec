@@ -47,7 +47,7 @@ BuildRequires: pkgconfig(yajl)
 
 # Workarround for EL9
 %if 0%{?el9}
-BuildRequires: make
+BuildRequires: make gcc
 %endif
 
 %if %{with ssdeep}
